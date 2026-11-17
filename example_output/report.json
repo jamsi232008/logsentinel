@@ -1,0 +1,243 @@
+{
+  "stats": {
+    "events parsed": 422,
+    "alerts": 11,
+    "incidents": 3,
+    "critical": 2
+  },
+  "incidents": [
+    {
+      "ip": "198.51.100.77",
+      "severity": "CRITICAL",
+      "score": 28,
+      "stages": [
+        "recon",
+        "exploit"
+      ],
+      "multi_stage": true,
+      "first_seen": "2026-11-16T03:30:00",
+      "last_seen": "2026-11-16T03:30:18",
+      "techniques": [
+        "T1190",
+        "T1595.002"
+      ],
+      "alerts": [
+        {
+          "rule": "sql_injection",
+          "severity": "HIGH",
+          "ip": "198.51.100.77",
+          "count": 3,
+          "first_seen": "2026-11-16T03:30:00",
+          "last_seen": "2026-11-16T03:30:15",
+          "description": "SQL injection attempt against a public-facing application",
+          "mitre": "T1190",
+          "stage": "exploit",
+          "evidence": [
+            "198.51.100.77 - - [16/Nov/2026:03:30:00 +0000] \"GET /products?id=1%20UNION%20SELECT%20username,password%20FROM%20users HTTP/1.1\" 200 3134 \"-\" \"sqlmap/1.7.2#stable (https://sqlmap.org)\"",
+            "198.51.100.77 - - [16/Nov/2026:03:30:03 +0000] \"GET /products?id=1%27%20OR%20%271%27%3D%271 HTTP/1.1\" 500 2149 \"-\" \"sqlmap/1.7.2#stable (https://sqlmap.org)\""
+          ]
+        },
+        {
+          "rule": "scanner_user_agent",
+          "severity": "MEDIUM",
+          "ip": "198.51.100.77",
+          "count": 7,
+          "first_seen": "2026-11-16T03:30:00",
+          "last_seen": "2026-11-16T03:30:18",
+          "description": "Known attack-tool user agent: sqlmap/1.7.2#stable (https://sqlmap.org)",
+          "mitre": "T1595.002",
+          "stage": "recon",
+          "evidence": [
+            "198.51.100.77 - - [16/Nov/2026:03:30:00 +0000] \"GET /products?id=1%20UNION%20SELECT%20username,password%20FROM%20users HTTP/1.1\" 200 3134 \"-\" \"sqlmap/1.7.2#stable (https://sqlmap.org)\""
+          ]
+        },
+        {
+          "rule": "xss",
+          "severity": "MEDIUM",
+          "ip": "198.51.100.77",
+          "count": 1,
+          "first_seen": "2026-11-16T03:30:06",
+          "last_seen": "2026-11-16T03:30:06",
+          "description": "Cross-site scripting attempt",
+          "mitre": "T1190",
+          "stage": "exploit",
+          "evidence": [
+            "198.51.100.77 - - [16/Nov/2026:03:30:06 +0000] \"GET /search?q=%3Cscript%3Ealert(1)%3C/script%3E HTTP/1.1\" 200 2852 \"-\" \"sqlmap/1.7.2#stable (https://sqlmap.org)\""
+          ]
+        },
+        {
+          "rule": "path_traversal",
+          "severity": "HIGH",
+          "ip": "198.51.100.77",
+          "count": 3,
+          "first_seen": "2026-11-16T03:30:09",
+          "last_seen": "2026-11-16T03:30:18",
+          "description": "Path traversal / local file read attempt",
+          "mitre": "T1190",
+          "stage": "exploit",
+          "evidence": [
+            "198.51.100.77 - - [16/Nov/2026:03:30:09 +0000] \"GET /download?file=../../../../etc/passwd HTTP/1.1\" 500 329 \"-\" \"sqlmap/1.7.2#stable (https://sqlmap.org)\"",
+            "198.51.100.77 - - [16/Nov/2026:03:30:12 +0000] \"GET /ping?host=8.8.8.8;cat%20/etc/passwd HTTP/1.1\" 200 1627 \"-\" \"sqlmap/1.7.2#stable (https://sqlmap.org)\""
+          ]
+        },
+        {
+          "rule": "command_injection",
+          "severity": "CRITICAL",
+          "ip": "198.51.100.77",
+          "count": 1,
+          "first_seen": "2026-11-16T03:30:12",
+          "last_seen": "2026-11-16T03:30:12",
+          "description": "OS command injection attempt",
+          "mitre": "T1190",
+          "stage": "exploit",
+          "evidence": [
+            "198.51.100.77 - - [16/Nov/2026:03:30:12 +0000] \"GET /ping?host=8.8.8.8;cat%20/etc/passwd HTTP/1.1\" 200 1627 \"-\" \"sqlmap/1.7.2#stable (https://sqlmap.org)\""
+          ]
+        }
+      ],
+      "response": [
+        "Apply output encoding and a strict Content-Security-Policy.",
+        "Block known tool UAs at WAF; treat as precursor to exploitation.",
+        "Canonicalise and validate file paths; run app with least privilege.",
+        "Remove shell calls with user input; patch immediately; hunt for webshells.",
+        "Use parameterised queries; add WAF rule; review DB logs for data access."
+      ]
+    },
+    {
+      "ip": "203.0.113.50",
+      "severity": "CRITICAL",
+      "score": 22,
+      "stages": [
+        "recon",
+        "access"
+      ],
+      "multi_stage": true,
+      "first_seen": "2026-11-16T02:10:00",
+      "last_seen": "2026-11-16T02:19:05",
+      "techniques": [
+        "T1046",
+        "T1078",
+        "T1087",
+        "T1110"
+      ],
+      "alerts": [
+        {
+          "rule": "port_scan",
+          "severity": "MEDIUM",
+          "ip": "203.0.113.50",
+          "count": 25,
+          "first_seen": "2026-11-16T02:10:00",
+          "last_seen": "2026-11-16T02:10:24",
+          "description": "25 distinct ports probed within 60s",
+          "mitre": "T1046",
+          "stage": "recon",
+          "evidence": [
+            "Nov 16 02:10:00 fw01 kernel: [89395.506] DROP IN=eth0 OUT= SRC=203.0.113.50 DST=10.0.0.5 LEN=44 PROTO=TCP SPT=64414 DPT=851 WINDOW=1024 SYN",
+            "Nov 16 02:10:01 fw01 kernel: [74048.474] DROP IN=eth0 OUT= SRC=203.0.113.50 DST=10.0.0.5 LEN=44 PROTO=TCP SPT=6942 DPT=169 WINDOW=1024 SYN"
+          ]
+        },
+        {
+          "rule": "ssh_bruteforce",
+          "severity": "HIGH",
+          "ip": "203.0.113.50",
+          "count": 40,
+          "first_seen": "2026-11-16T02:15:00",
+          "last_seen": "2026-11-16T02:18:54",
+          "description": "40 failed SSH logins within 300s",
+          "mitre": "T1110",
+          "stage": "access",
+          "evidence": [
+            "Nov 16 02:15:00 web01 sshd[7070]: Failed password for root from 203.0.113.50 port 40000 ssh2",
+            "Nov 16 02:15:06 web01 sshd[4559]: Failed password for admin from 203.0.113.50 port 40001 ssh2",
+            "Nov 16 02:15:12 web01 sshd[8264]: Failed password for invalid user test from 203.0.113.50 port 40002 ssh2"
+          ]
+        },
+        {
+          "rule": "user_enumeration",
+          "severity": "MEDIUM",
+          "ip": "203.0.113.50",
+          "count": 12,
+          "first_seen": "2026-11-16T02:15:00",
+          "last_seen": "2026-11-16T02:16:06",
+          "description": "12 distinct usernames tried (credential stuffing / account discovery)",
+          "mitre": "T1087",
+          "stage": "recon",
+          "evidence": [
+            "Nov 16 02:15:00 web01 sshd[7070]: Failed password for root from 203.0.113.50 port 40000 ssh2",
+            "Nov 16 02:15:06 web01 sshd[4559]: Failed password for admin from 203.0.113.50 port 40001 ssh2",
+            "Nov 16 02:15:12 web01 sshd[8264]: Failed password for invalid user test from 203.0.113.50 port 40002 ssh2"
+          ]
+        },
+        {
+          "rule": "login_after_bruteforce",
+          "severity": "CRITICAL",
+          "ip": "203.0.113.50",
+          "count": 41,
+          "first_seen": "2026-11-16T02:15:00",
+          "last_seen": "2026-11-16T02:19:05",
+          "description": "Successful login as 'admin' after 40 failures - possible account compromise",
+          "mitre": "T1078",
+          "stage": "access",
+          "evidence": [
+            "Nov 16 02:19:05 web01 sshd[1243]: Accepted password for admin from 203.0.113.50 port 40100 ssh2"
+          ]
+        }
+      ],
+      "response": [
+        "Block IP; close unused ports; verify exposed services against asset inventory.",
+        "Block source IP at firewall; enforce key-based auth / fail2ban; enable MFA.",
+        "Disable password auth for unused accounts; rate-limit and alert on invalid users.",
+        "TREAT AS BREACH: disable the account, kill sessions, rotate credentials, review shell history and persistence."
+      ]
+    },
+    {
+      "ip": "198.51.100.23",
+      "severity": "HIGH",
+      "score": 6,
+      "stages": [
+        "recon"
+      ],
+      "multi_stage": false,
+      "first_seen": "2026-11-16T05:00:00",
+      "last_seen": "2026-11-16T05:00:39",
+      "techniques": [
+        "T1595.002",
+        "T1595.003"
+      ],
+      "alerts": [
+        {
+          "rule": "scanner_user_agent",
+          "severity": "MEDIUM",
+          "ip": "198.51.100.23",
+          "count": 40,
+          "first_seen": "2026-11-16T05:00:00",
+          "last_seen": "2026-11-16T05:00:39",
+          "description": "Known attack-tool user agent: gobuster/3.6",
+          "mitre": "T1595.002",
+          "stage": "recon",
+          "evidence": [
+            "198.51.100.23 - - [16/Nov/2026:05:00:00 +0000] \"GET /admin HTTP/1.1\" 404 1238 \"-\" \"gobuster/3.6\""
+          ]
+        },
+        {
+          "rule": "dir_enumeration",
+          "severity": "MEDIUM",
+          "ip": "198.51.100.23",
+          "count": 40,
+          "first_seen": "2026-11-16T05:00:00",
+          "last_seen": "2026-11-16T05:00:39",
+          "description": "40 HTTP 404 responses within 60s (content discovery)",
+          "mitre": "T1595.003",
+          "stage": "recon",
+          "evidence": [
+            "198.51.100.23 - - [16/Nov/2026:05:00:00 +0000] \"GET /admin HTTP/1.1\" 404 1238 \"-\" \"gobuster/3.6\""
+          ]
+        }
+      ],
+      "response": [
+        "Block known tool UAs at WAF; treat as precursor to exploitation.",
+        "Rate-limit 404s; remove unused/backup files from web root."
+      ]
+    }
+  ]
+}
